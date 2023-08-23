@@ -1,0 +1,27 @@
+using UnityEngine;
+
+public static class Events {
+    public static PlayerDeathEvent PlayerDeathEvent = new();
+    public static GamePauseEvent GamePauseEvent = new();
+    public static GameQuitEvent GameQuitEvent = new();
+    public static GameCompletedEvent GameCompletedEvent = new();
+    public static GameTransitionEvent GameTransitionEvent = new();
+}
+
+public class GameEvent { }
+
+public class PlayerDeathEvent : GameEvent { }
+
+public class PlayerDamageEvent : GameEvent { }
+
+public class GamePauseEvent : GameEvent {
+    public bool paused;
+}
+
+public class GameQuitEvent : GameEvent { }
+
+public class GameCompletedEvent : GameEvent { }
+
+public class GameTransitionEvent : GameEvent {
+    public bool isTransitioning;
+}

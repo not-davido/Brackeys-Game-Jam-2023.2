@@ -1,0 +1,520 @@
+fileFormatVersion: 2
+guid: 19419222db6a440fdbbef33c385b1d88
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Spear_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 5, y: -21}
+        - {x: 1, y: -17}
+        - {x: 0, y: -17}
+        - {x: -4, y: -21}
+        - {x: -3, y: -28}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 4, y: -28}
+      tessellationDetail: 1
+      bones: []
+      spriteID: 30c257d60d09f473e9b47988c564133c
+      internalID: 399475149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spear_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: -16}
+        - {x: -4, y: -20}
+        - {x: -3, y: -27}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 4, y: -27}
+        - {x: 5, y: -20}
+        - {x: 1, y: -16}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42609e90e671f43f2928e256bc06fa2d
+      internalID: -452156501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spear_2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: 32}
+        - {x: -4, y: 28}
+        - {x: -3, y: 23}
+        - {x: -1, y: -29}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 2, y: -29}
+        - {x: 4, y: 23}
+        - {x: 5, y: 28}
+        - {x: 1, y: 32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c80554e134914da5a549fbdf5bc3977
+      internalID: 1377621695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spear_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: 32}
+        - {x: -4, y: 28}
+        - {x: -3, y: 23}
+        - {x: -1, y: -29}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 2, y: -29}
+        - {x: 4, y: 23}
+        - {x: 5, y: 28}
+        - {x: 1, y: 32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7318859987121456a8fe7cb0199efec9
+      internalID: 1362399720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spear_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: 32}
+        - {x: -4, y: 28}
+        - {x: -3, y: 23}
+        - {x: -1, y: -29}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 2, y: -29}
+        - {x: 4, y: 23}
+        - {x: 5, y: 28}
+        - {x: 1, y: 32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: b44089d4d168f4e96a4b142eb49602ad
+      internalID: 666382167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spear_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: 32}
+        - {x: -4, y: 28}
+        - {x: -3, y: 23}
+        - {x: -1, y: -29}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 2, y: -29}
+        - {x: 4, y: 23}
+        - {x: 5, y: 28}
+        - {x: 1, y: 32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf299e2eb91ca43b0ac1c1cdd41a5359
+      internalID: -1022196951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spear_6
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: 30}
+        - {x: -4, y: 26}
+        - {x: -3, y: 21}
+        - {x: -1, y: -29}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 2, y: -29}
+        - {x: 4, y: 21}
+        - {x: 5, y: 26}
+        - {x: 1, y: 30}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26528d18f740b4a758304bb8494df717
+      internalID: -513236896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spear_7
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: 12}
+        - {x: -4, y: 8}
+        - {x: -3, y: 3}
+        - {x: -1, y: -29}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 2, y: -29}
+        - {x: 4, y: 3}
+        - {x: 5, y: 8}
+        - {x: 1, y: 12}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2eda3cc5361b4fe187fc64fafc788c2
+      internalID: 1964018601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spear_8
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: 32}
+        - {x: -4, y: 28}
+        - {x: -3, y: 23}
+        - {x: -1, y: -29}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 2, y: -29}
+        - {x: 4, y: 23}
+        - {x: 5, y: 28}
+        - {x: 1, y: 32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: a47ee2d77112f4f7fb366856aaad3219
+      internalID: 1987569852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spear_9
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: 32}
+        - {x: -4, y: 28}
+        - {x: -3, y: 23}
+        - {x: -1, y: -29}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 2, y: -29}
+        - {x: 4, y: 23}
+        - {x: 5, y: 28}
+        - {x: 1, y: 32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9768090518b894044b7741b881ad8f17
+      internalID: 1886345464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spear_10
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: 32}
+        - {x: -4, y: 28}
+        - {x: -3, y: 23}
+        - {x: -1, y: -29}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 2, y: -29}
+        - {x: 4, y: 23}
+        - {x: 5, y: 28}
+        - {x: 1, y: 32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7937ed93b9cfd4bbfa25d562ec1d6463
+      internalID: 1378648989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spear_11
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 0
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: 32}
+        - {x: -4, y: 28}
+        - {x: -3, y: 23}
+        - {x: -1, y: -29}
+        - {x: -4, y: -32}
+        - {x: 5, y: -32}
+        - {x: 2, y: -29}
+        - {x: 4, y: 23}
+        - {x: 5, y: 28}
+        - {x: 1, y: 32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f90dd8aeb29b44701992f8b9a08547b1
+      internalID: 1011877055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Spear_0: 399475149
+      Spear_1: -452156501
+      Spear_10: 1378648989
+      Spear_11: 1011877055
+      Spear_2: 1377621695
+      Spear_3: 1362399720
+      Spear_4: 666382167
+      Spear_5: -1022196951
+      Spear_6: -513236896
+      Spear_7: 1964018601
+      Spear_8: 1987569852
+      Spear_9: 1886345464
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
