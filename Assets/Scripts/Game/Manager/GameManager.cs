@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-        EventManager.AddListener<GameTransitionEvent>(OnGameTransition);
+        //EventManager.AddListener<GameTransitionEvent>(OnGameTransition);
 
         player = FindFirstObjectByType<KinematicPlayerController2D>(FindObjectsInactive.Exclude);
     }
@@ -38,7 +38,7 @@ public class GameManager : Singleton<GameManager>
         player.transform.position = newPositionAfterDamage;
     }
 
-    void OnGameTransition(GameTransitionEvent evt) {
-        GameIsTransitioning = evt.isTransitioning;
-    }
+    //void OnGameTransition(GameTransitionEvent evt) {
+    //    GameIsTransitioning = evt.isTransitioning;
+    //}
 }

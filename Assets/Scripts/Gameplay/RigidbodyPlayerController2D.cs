@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D), typeof(PlayerInputHandler))]
-public class KinematicPlayerController2D : Player
+public class RigidbodyPlayerController2D : Player
 {
     public float AttackCooldown = 0.3f;
 
@@ -71,11 +71,6 @@ public class KinematicPlayerController2D : Player
     readonly int k_verticalMoveAnimationHash = Animator.StringToHash("MoveY");
     readonly int k_isGroundedAnimationHash = Animator.StringToHash("IsGrounded");
 
-    private void Awake()
-    {
-        EventManager.AddListener<GameTransitionEvent>(OnLevelTransition);
-    }
-
     // Start is called before the first frame update
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -83,8 +78,6 @@ public class KinematicPlayerController2D : Player
         input = GetComponent<PlayerInputHandler>();
         health = GetComponent<Health>();
         health.OnDamaged += OnDamaged;
-
-        rb.isKinematic = true;
 
         ContactFilter2D.useLayerMask = true;
     }
@@ -173,42 +166,12 @@ public class KinematicPlayerController2D : Player
 
         var count = rb.Cast(velocity.normalized, ContactFilter2D, results, velocity.magnitude * Time.deltaTime + 0.01f);
 
-        float distance = 0;
-
         for (int i = 0; i < count; i++) {
             var hitNormal = results[i].normal;
 
             if (Vector3.Dot(transform.up, hitNormal) > 0) {
                 groundNormal = hitNormal;
                 isGrounded = true;
-                distance = results[i].distance;
-
-                // So sprite won't flip or slide slowly down
-                if (Vector2.Angle(transform.up, groundNormal) <= 45f) {
-                    velocity.y = 0;
-                }
-            }
-
-            // If we collide with something while grounded, slow down or stop
-            // (ex: slowing down on hills or stop completely at a wall)
-            if (isGrounded) {
-                var projection = Vector2.Dot(velocity, hitNormal);
-
-                if (projection < 0) {
-                    velocity -= projection * hitNormal;
-                }
-
-                //velocity = Vector3.ProjectOnPlane(velocity, groundNormal);
-            } else {
-                // If we're in the air and hit something from the sides, stop x velocity
-                if (Vector2.Dot(transform.right, hitNormal) == -1) {
-                    velocity.x = 0;
-                }
-
-                // If we jump and hit something from top, stop y velocity
-                if (Vector2.Dot(transform.up, hitNormal) < 0) {
-                    velocity.y = Mathf.Min(velocity.y, 0);
-                }
             }
         }
 
@@ -326,7 +289,7 @@ public class KinematicPlayerController2D : Player
         }
 
         // Update final position
-        rb.MovePosition(rb.position + Time.fixedDeltaTime * velocity - new Vector2(0, distance));
+        rb.velocity = new Vector2(velocity.x, rb.velocity.y);
     }
 
     /// <summary>
@@ -351,20 +314,6 @@ public class KinematicPlayerController2D : Player
     void OnDamaged(float dmg, GameObject gameObject) {
         ScreenFade.Instance.FadeInAndOut(0.5f, 0.5f);
         tookDamaged = true;
-    }
-
-    void OnLevelTransition(GameTransitionEvent evt) {
-
-        if (evt.isTransitioningIn) {
-            print("hi");
-        }
-
-        if (evt.isTransitioningOut) {
-            print("there");
-            ResetVelocity();
-            ResetMove();
-            transform.position = evt.newPosition;
-        }
     }
 
     private void OnDrawGizmos() {
@@ -394,9 +343,5 @@ public class KinematicPlayerController2D : Player
             // Velocity direction ray
             RaycastHelper.DrawRayCast(box.bounds.center, velocity.normalized, 1);
         }
-    }
-
-    private void OnDisable() {
-        EventManager.RemoveListener<GameTransitionEvent>(OnLevelTransition);
     }
 }

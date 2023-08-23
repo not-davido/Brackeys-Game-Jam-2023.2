@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    //public int levelNumber;
     [SerializeField] Transform startingPoint;
-    //[SerializeField] bool hasEndingPoint;
     [SerializeField] Transform endingPoint;
 
     public Vector2 StartingPosition => startingPoint.position;

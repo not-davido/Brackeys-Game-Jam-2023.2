@@ -23,5 +23,10 @@ public class GameQuitEvent : GameEvent { }
 public class GameCompletedEvent : GameEvent { }
 
 public class GameTransitionEvent : GameEvent {
-    public bool isTransitioning;
+    public bool isTransitioningIn;
+    public bool isTransitioningOut;
+    /// <summary>
+    /// An optional new position after transitioning.
+    /// </summary>
+    public Vector2 newPosition;
 }

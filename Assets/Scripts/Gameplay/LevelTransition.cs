@@ -10,6 +10,7 @@ public class LevelTransition : MonoBehaviour
 
     bool levelIsTransitioningIn;
     bool levelIsTransitioningOut;
+    bool enteredNextLevel;
 
     private void Update()
     {
@@ -17,38 +18,49 @@ public class LevelTransition : MonoBehaviour
 
         if (levelIsTransitioningIn && fadeNormalizedTime >= 1) {
 
-            GameManager.Instance.SetPlayerActive(false);
-
             levelIsTransitioningIn = false;
             levelIsTransitioningOut = true;
+
+            //GameTransitionEvent evt = Events.GameTransitionEvent;
+            //evt.isTransitioningIn = true;
+            //EventManager.Broadcast(evt);
+            // Not working so..
+            //GameManager.Instance.SetPlayerActive(false);
         }
 
         if (levelIsTransitioningOut && fadeNormalizedTime < 1) {
-            var player = GameManager.Instance.GetPlayer();
 
-            player.gameObject.SetActive(true);
-            player.ResetVelocity();
-            player.ResetMove();
-            player.transform.position = StartingPoint ? NextLevel.StartingPosition : NextLevel.EndingPosition;
-
-            LevelManager.Instance.UpdateLevel();
+            //GameManager.Instance.SetPlayerActive(true);
 
             levelIsTransitioningOut = false;
+
+            GameTransitionEvent evt = Events.GameTransitionEvent;
+            evt.isTransitioningOut = true;
+            evt.newPosition = StartingPoint ? NextLevel.StartingPosition : NextLevel.EndingPosition;
+
+            EventManager.Broadcast(evt);
+
+            LevelManager.Instance.UpdateLevel();
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (enteredNextLevel) return;
+
         if (collision.TryGetComponent(out KinematicPlayerController2D _)) {
             LevelManager.Instance.NextLevel(NextLevel);
 
-            ScreenFade.Instance.Fade(0.5f, 0.5f, 0.5f);
+            ScreenFade.Instance.FadeInAndOut(0.5f, 0.5f, 0.5f);
 
             levelIsTransitioningIn = true;
             levelIsTransitioningOut = false;
-            //GameTransitionEvent evt = Events.GameTransitionEvent;
-            //evt.isTransitioning = true;
-            //EventManager.Broadcast(evt);
+            enteredNextLevel = true;
         }
+    }
+
+    private void OnDisable()
+    {
+        enteredNextLevel = false;
     }
 }

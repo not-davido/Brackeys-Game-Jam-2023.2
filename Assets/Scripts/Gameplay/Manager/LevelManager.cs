@@ -5,17 +5,26 @@ using UnityEngine;
 public class LevelManager : Singleton<LevelManager>
 {
     [SerializeField] List<Level> Levels = new();
+    [SerializeField] float PreventInputAfterLevelTransitionDuration = 1;
 
     [SerializeField] bool debug;
     [SerializeField] int startAtLevel = 0;
     [SerializeField] Transform spawn;
 
-    //Transform startPosition;
-    //int currentLevel;
     Level currentLevel;
+    float inputDisabledTimer;
+
+    public bool InputIsDisabled => Time.time < inputDisabledTimer + PreventInputAfterLevelTransitionDuration;
+
+    private void Awake()
+    {
+        EventManager.AddListener<GameTransitionEvent>(OnLevelTransition);
+    }
 
     private void Start()
     {
+        ScreenFade.Instance.FadeOut(0.7f);
+
         if (debug) {
             if (startAtLevel >= Levels.Count || startAtLevel < 0) {
                 Debug.LogWarning("Level number does not exist");
@@ -35,15 +44,12 @@ public class LevelManager : Singleton<LevelManager>
         }
 
         Levels[0].gameObject.SetActive(true);
-
-        //currentLevel = Levels[0].levelNumber;
     }
 
-    //public void NextLevel(Level level, Transform startingPosition) {
-    //    currentLevel = level.levelNumber;
-    //    startPosition = startingPosition;
-    //}
-
+    /// <summary>
+    /// Get the next level for transition. Use UpdateLevel() to update.
+    /// </summary>
+    /// <param name="level"></param>
     public void NextLevel(Level level) {
         currentLevel = level;
     }
@@ -59,5 +65,15 @@ public class LevelManager : Singleton<LevelManager>
                 level.gameObject.SetActive(false);
             }
         }
+    }
+
+    void OnLevelTransition(GameTransitionEvent evt) {
+        if (evt.isTransitioningOut)
+            inputDisabledTimer = Time.time;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.RemoveListener<GameTransitionEvent>(OnLevelTransition);
     }
 }
