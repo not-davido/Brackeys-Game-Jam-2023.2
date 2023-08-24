@@ -550,7 +550,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &114429068
 Animator:
   serializedVersion: 5
@@ -2830,7 +2830,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &563399498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2844,8 +2844,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AttackCooldown: 0.3
-  Speed: 3
-  JumpForce: 5
+  Speed: 10
+  JumpForce: 10
   MaxJumpDuration: 0.2
   CanDoubleJump: 0
   DoubleJumpForce: 2
@@ -2863,18 +2863,22 @@ MonoBehaviour:
   WallJumpInputPreventionCooldown: 0.5
   ContactFilter2D:
     useTriggers: 0
-    useLayerMask: 0
+    useLayerMask: 1
     useDepth: 0
     useOutsideDepth: 0
     useNormalAngle: 0
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 55
     minDepth: 0
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
+  GroundDistanceCheck: 0.4
+  CollisionLayer:
+    serializedVersion: 2
+    m_Bits: 55
 --- !u!114 &563399499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3085,7 +3089,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 5
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -3096,7 +3100,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &563399505
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12498,7 +12502,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3613802236567709076, guid: 5638d7ccfa95b44efb8738f870082e32, type: 3}
       propertyPath: m_GeometryType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -3613802236567709076, guid: 5638d7ccfa95b44efb8738f870082e32, type: 3}
       propertyPath: m_ColliderPaths.Array.size

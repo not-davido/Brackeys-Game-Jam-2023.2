@@ -71,9 +71,13 @@ public class KinematicPlayerController2D : Player
     readonly int k_verticalMoveAnimationHash = Animator.StringToHash("MoveY");
     readonly int k_isGroundedAnimationHash = Animator.StringToHash("IsGrounded");
 
-    private void Awake()
+    private void OnEnable()
     {
-        EventManager.AddListener<GameTransitionEvent>(OnLevelTransition);
+        EventManager.AddListener<LevelTransitionEvent>(OnLevelTransition);
+    }
+
+    private void OnDisable() {
+        EventManager.RemoveListener<LevelTransitionEvent>(OnLevelTransition);
     }
 
     // Start is called before the first frame update
@@ -340,11 +344,11 @@ public class KinematicPlayerController2D : Player
     /// <summary>
     /// Sets the velocity to (0, 0, 0).
     /// </summary>
-    public void ResetVelocity() {
+    public override void ResetVelocity() {
         velocity = Vector2.zero;
     }
 
-    public void ResetMove() {
+    public override void ResetMove() {
         input.ResetMove();
     }
 
@@ -353,14 +357,9 @@ public class KinematicPlayerController2D : Player
         tookDamaged = true;
     }
 
-    void OnLevelTransition(GameTransitionEvent evt) {
-
-        if (evt.isTransitioningIn) {
-            print("hi");
-        }
+    void OnLevelTransition(LevelTransitionEvent evt) {
 
         if (evt.isTransitioningOut) {
-            print("there");
             ResetVelocity();
             ResetMove();
             transform.position = evt.newPosition;
@@ -394,9 +393,5 @@ public class KinematicPlayerController2D : Player
             // Velocity direction ray
             RaycastHelper.DrawRayCast(box.bounds.center, velocity.normalized, 1);
         }
-    }
-
-    private void OnDisable() {
-        EventManager.RemoveListener<GameTransitionEvent>(OnLevelTransition);
     }
 }

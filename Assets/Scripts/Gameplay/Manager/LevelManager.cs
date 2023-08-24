@@ -16,9 +16,13 @@ public class LevelManager : Singleton<LevelManager>
 
     public bool InputIsDisabled => Time.time < inputDisabledTimer + PreventInputAfterLevelTransitionDuration;
 
-    private void Awake()
+    private void OnEnable()
     {
-        EventManager.AddListener<GameTransitionEvent>(OnLevelTransition);
+        EventManager.AddListener<LevelTransitionEvent>(OnLevelTransition);
+    }
+
+    private void OnDisable() {
+        EventManager.RemoveListener<LevelTransitionEvent>(OnLevelTransition);
     }
 
     private void Start()
@@ -67,13 +71,8 @@ public class LevelManager : Singleton<LevelManager>
         }
     }
 
-    void OnLevelTransition(GameTransitionEvent evt) {
+    void OnLevelTransition(LevelTransitionEvent evt) {
         if (evt.isTransitioningOut)
             inputDisabledTimer = Time.time;
-    }
-
-    private void OnDisable()
-    {
-        EventManager.RemoveListener<GameTransitionEvent>(OnLevelTransition);
     }
 }

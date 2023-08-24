@@ -21,26 +21,22 @@ public class LevelTransition : MonoBehaviour
             levelIsTransitioningIn = false;
             levelIsTransitioningOut = true;
 
-            //GameTransitionEvent evt = Events.GameTransitionEvent;
-            //evt.isTransitioningIn = true;
-            //EventManager.Broadcast(evt);
-            // Not working so..
-            //GameManager.Instance.SetPlayerActive(false);
+            GameManager.Instance.SetPlayerActive(false);
         }
 
         if (levelIsTransitioningOut && fadeNormalizedTime < 1) {
 
-            //GameManager.Instance.SetPlayerActive(true);
-
             levelIsTransitioningOut = false;
 
-            GameTransitionEvent evt = Events.GameTransitionEvent;
+            LevelManager.Instance.UpdateLevel();
+
+            GameManager.Instance.SetPlayerActive(true);
+
+            LevelTransitionEvent evt = Events.LevelTransitionEvent;
             evt.isTransitioningOut = true;
             evt.newPosition = StartingPoint ? NextLevel.StartingPosition : NextLevel.EndingPosition;
 
             EventManager.Broadcast(evt);
-
-            LevelManager.Instance.UpdateLevel();
         }
     }
 
@@ -48,7 +44,7 @@ public class LevelTransition : MonoBehaviour
     {
         if (enteredNextLevel) return;
 
-        if (collision.TryGetComponent(out KinematicPlayerController2D _)) {
+        if (collision.TryGetComponent(out Player _)) {
             LevelManager.Instance.NextLevel(NextLevel);
 
             ScreenFade.Instance.FadeInAndOut(0.5f, 0.5f, 0.5f);

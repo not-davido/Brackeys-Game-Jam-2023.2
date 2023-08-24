@@ -5,7 +5,7 @@ public static class Events {
     public static GamePauseEvent GamePauseEvent = new();
     public static GameQuitEvent GameQuitEvent = new();
     public static GameCompletedEvent GameCompletedEvent = new();
-    public static GameTransitionEvent GameTransitionEvent = new();
+    public static LevelTransitionEvent LevelTransitionEvent = new();
 }
 
 public class GameEvent { }
@@ -22,7 +22,7 @@ public class GameQuitEvent : GameEvent { }
 
 public class GameCompletedEvent : GameEvent { }
 
-public class GameTransitionEvent : GameEvent {
+public class LevelTransitionEvent : GameEvent {
     public bool isTransitioningIn;
     public bool isTransitioningOut;
     /// <summary>
