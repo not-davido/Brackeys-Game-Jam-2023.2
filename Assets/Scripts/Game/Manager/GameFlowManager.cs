@@ -7,20 +7,19 @@ public class GameFlowManager : Singleton<GameFlowManager>
 {
     [SerializeField] float DelayBeforeLoadingNextScene = 1;
 
-    float delayTimer;
-
     public bool GameIsEnding { get; private set; }
 
     // Start is called before the first frame update
     void OnEnable()
     {
+        EventManager.AddListener<PlayerWinEvent>(OnPlayerWin);
         EventManager.AddListener<PlayerDeathEvent>(OnPlayerDeath);
     }
 
     private void OnDisable()
     {
+        EventManager.RemoveListener<PlayerWinEvent>(OnPlayerWin);
         EventManager.RemoveListener<PlayerDeathEvent>(OnPlayerDeath);
-
     }
 
     // Update is called once per frame
@@ -37,11 +36,12 @@ public class GameFlowManager : Singleton<GameFlowManager>
         GameIsEnding = true;
 
         if (win) {
-
+            // no time for a cutscene lol
         } else {
             ScreenFade.Instance.FadeIn(2.5f, 1);
         }
     }
 
+    void OnPlayerWin(PlayerWinEvent evt) => EndGame(true);
     void OnPlayerDeath(PlayerDeathEvent evt) => EndGame(false);
 }
