@@ -92,13 +92,13 @@ public class ScreenFade : Singleton<ScreenFade>
         delayBetween = holdBetween;
     }
 
-    public void FadeIn(float duration) {
+    public void FadeIn(float duration, float delayBeforeFade = 0) {
         fadeInAndOut = false;
         fadingIn = true;
         fadingOut = false;
         fadeInFinished = false;
 
-        transitionTimer = Time.time;
+        transitionTimer = Time.time + delayBeforeFade;
 
         transitionIn = duration;
     }

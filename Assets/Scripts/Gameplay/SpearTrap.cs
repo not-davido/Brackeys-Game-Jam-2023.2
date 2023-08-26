@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpearTrap : MonoBehaviour
+public class SpearTrap : Trap
 {
     [SerializeField] BoxCollider2D[] colliders;
     [SerializeField] float interval = 2;
     [SerializeField] bool isStartingSpearOut;
 
-    [Tooltip("If player is hit, will they be taken back in a different positon?")]
-    [SerializeField] bool hitResetsPosition = true;
-    [SerializeField] Transform positionAfterHit;
+    [SerializeField] AudioClip spearSfx;
 
     Animator anim;
+    AudioSource audioSource;
     float timer;
     bool spearOut;
 
@@ -20,10 +19,7 @@ public class SpearTrap : MonoBehaviour
     void Start()
     {
         colliders = GetComponentsInChildren<BoxCollider2D>();
-
-        foreach (var c in colliders) {
-            c.isTrigger = true;
-        }
+        audioSource = GetComponent<AudioSource>();
 
         anim = GetComponent<Animator>();
         anim.SetBool("isStartingSpearOut", isStartingSpearOut);
@@ -56,23 +52,8 @@ public class SpearTrap : MonoBehaviour
         }
     }
 
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (collision.collider.TryGetComponent(out Health health)) {
-    //        health.TakeDamage(1, collision);
-
-    //        if (hitResetsPosition) {
-    //            GameManager.Instance.GetPositionAfterDamage(positionAfterHit.position);
-    //        }
-    //    }
-    //}
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.TryGetComponent(out Health playerHealth)) {
-            if (playerHealth.TakeDamage(1, null)) {
-                GameManager.Instance.GetPositionAfterDamage(positionAfterHit.position);
-            }
-        }
+    public void PlaySpearSfx() {
+        if (audioSource != null)
+            audioSource.PlayOneShot(spearSfx);
     }
 }

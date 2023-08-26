@@ -49,6 +49,7 @@ public class RigidbodyPlayerController2D : Player
     Rigidbody2D rb;
     Health health;
     BoxCollider2D box2D;
+    Transform positionAfterHit;
     Vector2 velocity;
     Vector2 groundNormal;
     Vector2 wallNormal;
@@ -68,7 +69,8 @@ public class RigidbodyPlayerController2D : Player
     bool isWallSliding;
     bool canDash;
     bool canDoubleJump;
-    bool tookDamaged;
+    bool isDead;
+
 
     readonly int k_horizontalMoveAnimationHash = Animator.StringToHash("MoveX");
     readonly int k_verticalMoveAnimationHash = Animator.StringToHash("MoveY");
@@ -90,6 +92,7 @@ public class RigidbodyPlayerController2D : Player
         input = GetComponent<PlayerInputHandler>();
         health = GetComponent<Health>();
         health.OnDamaged += OnDamaged;
+        health.OnDie += OnDie;
 
         ContactFilter2D.useLayerMask = true;
     }
@@ -134,17 +137,20 @@ public class RigidbodyPlayerController2D : Player
             anim.SetFloat(k_verticalMoveAnimationHash, velocity.y);
         }
 
-        if (tookDamaged && ScreenFade.Instance.NormalizedTime >= 1) {
-            GameManager.Instance.SetPlayerPositionAfterDamage();
+        if (!isDead && TookDamage && ScreenFade.Instance.NormalizedTime >= 1) {
+            transform.position = positionAfterHit.position;
             ResetVelocity();
             ResetMove();
-            tookDamaged = false;
+            TookDamage = false;
+            positionAfterHit = null;
         }
     }
 
     private void FixedUpdate() {
 
         velocity = new(move.x * Speed, 0);
+
+        wasPreviouslyGrounded = isGrounded;
 
         isGrounded = false;
         groundNormal = Vector2.zero;
@@ -182,254 +188,62 @@ public class RigidbodyPlayerController2D : Player
             }
         }
 
-        //// Ground checking
-        //RaycastHit2D[] results = new RaycastHit2D[2];
-        //var count = rb.Cast(Vector2.down, ContactFilter2D, results, GroundDistanceCheck);
+        if (!TookDamage) {
+            rb.velocity = new(velocity.x, rb.velocity.y);
 
-        //for (int i = 0; i < count; i++) {
-        //    var hitNormal = results[i].normal;
+            if (isGrounded) {
+                canDoubleJump = false;
 
-        //    if (Vector2.Dot(transform.up, hitNormal) > 0) {
-        //        isGrounded = true;
-        //        groundNormal = hitNormal;
-        //    }
-        //}
+                if (jumped) {
+                    rb.velocity = new(rb.velocity.x, 0);
+                    rb.AddForce(JumpForce / 3 * Vector2.up, ForceMode2D.Impulse);
 
-        wallNormal = Vector2.zero;
+                    isGrounded = false;
+                    groundNormal = Vector2.zero;
+                    canDoubleJump = true;
+                }
 
-        //// Wall checking to not get stuck while input is still held
-        //results = new RaycastHit2D[2];
-        //count = rb.Cast(transform.right, ContactFilter2D, results, WallDistanceCheck);
-
-        //for (int i = 0; i < count; i++) {
-        //    var hitNormal = results[i].normal;
-
-        //    if (Vector2.Dot(Vector2.right, hitNormal) < 0) {
-        //        wallNormal = hitNormal;
-        //    }
-
-        //    if (isGrounded) {
-        //        var projection = Vector2.Dot(transform.right, wallNormal);
-
-        //        if (projection < 0) {
-        //            velocity -= projection * hitNormal;
-        //        }
-        //    } else {
-        //        if (Vector2.Dot(transform.right, wallNormal) == -1) {
-        //            velocity.x = 0;
-        //        }
-        //    }
-        //}
-
-        rb.velocity = new(velocity.x, rb.velocity.y);
-
-        if (isGrounded) {
-            if (jumped) {
-                rb.AddForce(JumpForce / 3 * Vector2.up, ForceMode2D.Impulse);
-
-                isGrounded = false;
-            }
-
-            lastTimeOnGround = Time.time;
-
-        } else {
-            if (jumped && input.jumpHeld && rb.velocity.y > 0 && Time.time < lastTimeOnGround + MaxJumpDuration) {
-                rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
-
-                // Clamp y jump height
-                Vector2 verticalVelocity = new(0, rb.velocity.y);
-                verticalVelocity = Vector2.ClampMagnitude(verticalVelocity, JumpForce);
-                rb.velocity = verticalVelocity + velocity;
+                lastTimeOnGround = Time.time;
 
             } else {
-                jumped = false;
+
+                if (wasPreviouslyGrounded && !isGrounded) {
+                    canDoubleJump = true;
+                }
+
+                if (jumped && input.jumpHeld && rb.velocity.y > 0 && Time.time < lastTimeOnGround + MaxJumpDuration) {
+                    rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+
+                    // Clamp jump velocity to not go higher
+                    Vector2 jumpVelocity = new(0, rb.velocity.y);
+                    jumpVelocity = Vector2.ClampMagnitude(jumpVelocity, JumpForce);
+                    rb.velocity = jumpVelocity + velocity;
+
+                } else {
+                    jumped = false;
+
+                    // Clamp vertical velocity magnitude while falling to prevent speeding up
+                    Vector2 verticalVelocity = new(0, rb.velocity.y);
+                    verticalVelocity = Vector2.ClampMagnitude(verticalVelocity, MaxVelocityForceDown);
+                    rb.velocity = verticalVelocity + velocity;
+                }
+
+                if (doubleJumped) {
+                    rb.velocity = new(rb.velocity.x, 0);
+                    rb.AddForce(Vector2.up * DoubleJumpForce, ForceMode2D.Impulse);
+
+                    doubleJumped = false;
+                    canDoubleJump = false;
+                }
+            }
+
+            // Flip sprite after final velocity
+            if (velocity.x > 0) {
+                FlipSprite(0);
+            } else if (velocity.x < 0) {
+                FlipSprite(180);
             }
         }
-
-        // Flip sprite after final velocity
-        if (velocity.x > 0) {
-            FlipSprite(0);
-        } else if (velocity.x < 0) {
-            FlipSprite(180);
-        }
-
-        //// Apply gravity over time
-        //if (!jumped)
-        //    velocity += GravityForceDown * Time.deltaTime * Vector2.down;
-
-        //// Clamp vertical magnitude to prevent it from speeding up
-        ////Vector2 verticalVelocity = new(0, velocity.y);
-        ////verticalVelocity = Vector2.ClampMagnitude(verticalVelocity, MaxVelocityForceDown);
-        ////velocity = verticalVelocity + (velocity.x * Vector2.right);
-
-        //// Y velocity should be 0 so we won't be falling during dash
-        //if (Time.time < lastTimeDashed + DashInputPreventionCooldown)
-        //    velocity.y = 0;
-
-        //// Reduce y velocity if we're against a wall
-        //if (velocity.y < 0 && isWallSliding) {
-        //    velocity = WallSlideSpeed * Vector2.down;
-        //}
-
-        //// Prevent velocity from being updated by input after wall jump or dashing
-        //if (Time.time > lastTimeWallJumped + WallJumpInputPreventionCooldown &&
-        //    Time.time > lastTimeDashed + DashInputPreventionCooldown &&
-        //    !previouslyWallJumped) {
-        //    velocity.x = move.x * Speed;
-        //}
-
-        //wasPreviouslyGrounded = isGrounded;
-
-        //// For collision checking
-        //isGrounded = false;
-        //groundNormal = Vector2.up;
-
-        //RaycastHit2D[] results = new RaycastHit2D[8];
-
-        //var count = rb.Cast(velocity.normalized, ContactFilter2D, results, velocity.magnitude * Time.deltaTime + 0.01f);
-
-        //for (int i = 0; i < count; i++) {
-        //    var hitNormal = results[i].normal;
-
-        //    if (Vector3.Dot(transform.up, hitNormal) > 0) {
-        //        groundNormal = hitNormal;
-        //        isGrounded = true;
-        //    }
-
-        //    // If we collide with something while grounded, slow down or stop
-        //    // (ex: slowing down on hills or stop completely at a wall)
-        //    if (isGrounded) {
-        //        var projection = Vector2.Dot(velocity, hitNormal);
-
-        //        if (projection < 0) {
-        //            velocity -= projection * hitNormal;
-        //        }
-
-        //    } else {
-        //        // If we're in the air and hit something from the sides, stop x velocity
-        //        if (Vector2.Dot(transform.right, hitNormal) == -1) {
-        //            velocity.x = 0;
-        //        }
-        //    }
-        //}
-
-        //// For wall jumping and sliding
-        //canWallJump = false;
-        //isWallSliding = false;
-        //wallNormal = Vector2.zero;
-
-        //RaycastHit2D[] sideResults = new RaycastHit2D[5];
-
-        //var sideCount = rb.Cast(transform.right, ContactFilter2D, sideResults, WallDistanceCheck);
-
-        //for (int i = 0; i < sideCount; i++) {
-        //    var sideNormal = sideResults[i].normal;
-
-        //    if (!isGrounded) {
-        //        if (Vector2.Dot(transform.right, sideNormal) <= -1) {
-        //            canWallJump = true;
-        //            isWallSliding = true;
-        //            wallNormal = sideNormal;
-        //        }
-        //    }
-        //}
-
-        //if (canWallJump) {
-        //    previouslyWallJumped = false;
-        //}
-
-        //if (isGrounded) {
-        //    canDash = true;
-        //    previouslyWallJumped = false;
-        //    canDoubleJump = false;
-
-        //    if (jumped) {
-        //        rb.velocity = new(velocity.x, 0);
-        //        // Jump 1/3 of maximum jump height if just tapped
-        //        //velocity += JumpForce / 2 * Vector2.up;
-
-        //        rb.velocity += JumpForce / 2 * Vector2.up;
-
-        //        canDoubleJump = true;
-        //        isGrounded = false;
-        //        groundNormal = Vector2.up;
-        //    }
-
-        //    lastTimeOnGround = Time.time;
-
-        //} else {
-
-        //    if (wasPreviouslyGrounded && !isGrounded) {
-        //        canDoubleJump = true;
-        //    }
-
-        //    //if (isWallSliding) {
-        //    //    canDoubleJump = false;
-        //    //}
-
-        //    if (previouslyWallJumped) {
-        //        canDash = true;
-        //        velocity.x += Time.deltaTime * move.x * AirAcceleration;
-
-        //        // Clamp horizontal speed
-        //        Vector2 horizontalVelocity = new(velocity.x, 0);
-        //        horizontalVelocity = Vector2.ClampMagnitude(horizontalVelocity, Speed);
-        //        velocity = horizontalVelocity + (velocity.y * Vector2.up);
-        //    }
-
-        //    if (wallJumped) {
-        //        // If we fall and haven't jumped yet and then wall slide, double jumping condition may be set true
-        //        // which will not double jump so reset to false
-        //        //if (canDoubleJump) {
-        //        //    canDoubleJump = false;
-        //        //}
-
-        //        //canDoubleJump = false;
-
-        //        velocity = Vector2.zero;
-        //        velocity += wallNormal.x * WallJumpForce * Vector2.right + WallJumpForce * Vector2.up;
-
-        //        lastTimeWallJumped = Time.time;
-        //        wallJumped = false;
-        //        previouslyWallJumped = true;
-        //        canDoubleJump = true;
-        //    }
-
-        //    if (jumped && input.jumpHeld && velocity.y > 0 && Time.time < lastTimeOnGround + MaxJumpDuration) {
-        //        rb.velocity += JumpForce * Vector2.up;
-        //    } else {
-        //        jumped = false;
-        //    }
-
-        //    if (doubleJumped) {
-        //        rb.velocity = new(rb.velocity.x, 0);
-        //        rb.velocity += DoubleJumpForce * Vector2.up;
-
-        //        doubleJumped = false;
-        //        canDoubleJump = false;
-        //    }
-        //}
-
-        //if (dashed) {
-        //    if (!isGrounded)
-        //        canDash = false;
-
-        //    velocity.x = 0;
-        //    velocity += DashForce * (Vector2)transform.right;
-        //    lastTimeDashed = Time.time;
-        //    dashed = false;
-        //    previouslyWallJumped = false;
-        //}
-
-        //// Flip sprite after final velocity
-        //if (velocity.x > 0) {
-        //    FlipSprite(0);
-        //} else if (velocity.x < 0) {
-        //    FlipSprite(180);
-        //}
-
-        //// Update final position
-        //rb.velocity = new Vector2(velocity.x, rb.velocity.y);
     }
 
     /// <summary>
@@ -459,9 +273,16 @@ public class RigidbodyPlayerController2D : Player
         }
     }
 
-    void OnDamaged(float dmg, GameObject gameObject) {
-        ScreenFade.Instance.FadeInAndOut(0.5f, 0.5f);
-        tookDamaged = true;
+    void OnDamaged(float dmg, GameObject gameObject, Transform positionAfterHit) {
+        TookDamage = true;
+        this.positionAfterHit = positionAfterHit;
+        ScreenFade.Instance.FadeInAndOut(0.5f, 0.5f, 0.5f);
+    }
+
+    void OnDie() {
+        isDead = true;
+
+        EventManager.Broadcast(Events.PlayerDeathEvent);
     }
 
     private void OnDrawGizmos() {

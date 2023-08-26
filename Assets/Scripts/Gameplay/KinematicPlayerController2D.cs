@@ -134,7 +134,6 @@ public class KinematicPlayerController2D : Player
         }
 
         if (tookDamaged && ScreenFade.Instance.NormalizedTime >= 1) {
-            GameManager.Instance.SetPlayerPositionAfterDamage();
             ResetVelocity();
             ResetMove();
             tookDamaged = false;
@@ -352,7 +351,7 @@ public class KinematicPlayerController2D : Player
         input.ResetMove();
     }
 
-    void OnDamaged(float dmg, GameObject gameObject) {
+    void OnDamaged(float dmg, GameObject gameObject, Transform t) {
         ScreenFade.Instance.FadeInAndOut(0.5f, 0.5f);
         tookDamaged = true;
     }

@@ -29,7 +29,10 @@ public class PlayerInputHandler : MonoBehaviour
     public bool inspect { get; set; }
     public float weaponSwitch { get; set; }
 
-    public bool CanUseInput => !LevelManager.Instance.InputIsDisabled;
+    public bool CanUseInput =>
+        !LevelManager.Instance.InputIsDisabled &&
+        !GameFlowManager.Instance.GameIsEnding &&
+        !PauseDetector.Instance.IsGamePaused;
 
     private void Awake()
     {

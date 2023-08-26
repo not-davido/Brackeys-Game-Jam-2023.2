@@ -6,6 +6,8 @@ public static class Events {
     public static GameQuitEvent GameQuitEvent = new();
     public static GameCompletedEvent GameCompletedEvent = new();
     public static LevelTransitionEvent LevelTransitionEvent = new();
+    public static CollectiblePickUpEvent CollectiblePickUpEvent = new();
+
 }
 
 public class GameEvent { }
@@ -30,3 +32,5 @@ public class LevelTransitionEvent : GameEvent {
     /// </summary>
     public Vector2 newPosition;
 }
+
+public class CollectiblePickUpEvent : GameEvent { }

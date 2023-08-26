@@ -8,7 +8,6 @@ public class GameManager : Singleton<GameManager>
     /// Quick access to the player instance.
     /// </summary>
     Player player;
-    Vector3 newPositionAfterDamage;
 
     private void Awake()
     {
@@ -21,13 +20,5 @@ public class GameManager : Singleton<GameManager>
 
     public void SetPlayerActive(bool active) {
         player.gameObject.SetActive(active);
-    }
-
-    public void GetPositionAfterDamage(Vector3 position) {
-        newPositionAfterDamage = position;
-    }
-
-    public void SetPlayerPositionAfterDamage() {
-        player.transform.position = newPositionAfterDamage;
     }
 }

@@ -44,7 +44,9 @@ public class LevelTransition : MonoBehaviour
     {
         if (enteredNextLevel) return;
 
-        if (collision.TryGetComponent(out Player _)) {
+        if (collision.TryGetComponent(out Player player)) {
+            if (player.TookDamage) return;
+
             LevelManager.Instance.NextLevel(NextLevel);
 
             ScreenFade.Instance.FadeInAndOut(0.5f, 0.5f, 0.5f);

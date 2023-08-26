@@ -13,7 +13,7 @@ public class Health : MonoBehaviour
 
     public float InvincibleDuration = 0.8f;
 
-    public UnityAction<float, GameObject> OnDamaged;
+    public UnityAction<float, GameObject, Transform> OnDamaged;
     public UnityAction<float> OnHealed;
     public UnityAction OnDie;
 
@@ -27,7 +27,7 @@ public class Health : MonoBehaviour
     bool m_IsDead;
     float invincibleTimer;
 
-    void Start() {
+    void Awake() {
         CurrentHealth = MaxHealth;
     }
 
@@ -40,7 +40,9 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void Heal(float healAmount) {
+    public bool Heal(float healAmount) {
+        if (CurrentHealth == MaxHealth) return false;
+
         float healthBefore = CurrentHealth;
         CurrentHealth += healAmount;
         CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, MaxHealth);
@@ -50,9 +52,11 @@ public class Health : MonoBehaviour
         if (trueHealAmount > 0f) {
             OnHealed?.Invoke(trueHealAmount);
         }
+
+        return true;
     }
 
-    public bool TakeDamage(float damage, GameObject damageSource) {
+    public bool TakeDamage(float damage, GameObject damageSource, Transform positionAfterHit = null) {
         if (Invincible)
             return false;
 
@@ -65,7 +69,7 @@ public class Health : MonoBehaviour
         // call OnDamage action
         float trueDamageAmount = healthBefore - CurrentHealth;
         if (trueDamageAmount > 0f) {
-            OnDamaged?.Invoke(trueDamageAmount, damageSource);
+            OnDamaged?.Invoke(trueDamageAmount, damageSource, positionAfterHit);
         }
 
         HandleDeath();
@@ -77,7 +81,7 @@ public class Health : MonoBehaviour
         CurrentHealth = 0f;
 
         // call OnDamage action
-        OnDamaged?.Invoke(MaxHealth, null);
+        OnDamaged?.Invoke(MaxHealth, null, null);
 
         HandleDeath();
     }
