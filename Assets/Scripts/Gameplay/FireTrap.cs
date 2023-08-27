@@ -33,7 +33,7 @@ public class FireTrap : Trap
             box2d.enabled = fire.activeSelf;
 
             if (fire.activeSelf) {
-                anim.Play("Fire", 0, 0);
+                anim.Play("Idle", 0, 0);
             }
 
             fireTimer = Time.time;

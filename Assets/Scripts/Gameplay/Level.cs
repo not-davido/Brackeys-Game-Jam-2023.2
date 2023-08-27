@@ -7,6 +7,8 @@ public class Level : MonoBehaviour
     [SerializeField] Transform startingPoint;
     [SerializeField] Transform endingPoint;
 
+    public Transform StartPoint => startingPoint;
+
     public Vector2 StartingPosition => startingPoint.position;
     public Vector2 EndingPosition {
         get {

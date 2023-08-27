@@ -16,4 +16,9 @@ public class Projectile : Trap
 
         Destroy(gameObject);
     }
+
+    private void OnDisable()
+    {
+        Destroy(gameObject);
+    }
 }

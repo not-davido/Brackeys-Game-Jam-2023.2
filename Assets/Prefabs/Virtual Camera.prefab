@@ -248,6 +248,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 976559de8c0d7447994ada6f5242ca95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  durationToShiftCamera: 0.8
+  durationToShiftCamera: 0.4
   shiftingSpace: 0.5
   lerpTime: 15

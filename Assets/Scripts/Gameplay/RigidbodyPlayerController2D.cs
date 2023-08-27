@@ -78,10 +78,12 @@ public class RigidbodyPlayerController2D : Player
 
     private void OnEnable() {
         EventManager.AddListener<LevelTransitionEvent>(OnLevelTransition);
+        EventManager.AddListener<PlayerWinEvent>(OnGameWin);
     }
 
     private void OnDisable() {
         EventManager.RemoveListener<LevelTransitionEvent>(OnLevelTransition);
+        EventManager.RemoveListener<PlayerWinEvent>(OnGameWin);
     }
 
     // Start is called before the first frame update
@@ -133,8 +135,8 @@ public class RigidbodyPlayerController2D : Player
     private void LateUpdate() {
         if (anim != null) {
             anim.SetBool(k_isGroundedAnimationHash, isGrounded);
-            anim.SetFloat(k_horizontalMoveAnimationHash, Mathf.Abs(velocity.x));
-            anim.SetFloat(k_verticalMoveAnimationHash, velocity.y);
+            anim.SetFloat(k_horizontalMoveAnimationHash, Mathf.Abs(rb.velocity.x));
+            anim.SetFloat(k_verticalMoveAnimationHash, rb.velocity.y);
         }
 
         if (!isDead && TookDamage && ScreenFade.Instance.NormalizedTime >= 1) {
@@ -143,6 +145,7 @@ public class RigidbodyPlayerController2D : Player
             ResetMove();
             TookDamage = false;
             positionAfterHit = null;
+            anim.SetTrigger("Respawn");
         }
     }
 
@@ -155,13 +158,13 @@ public class RigidbodyPlayerController2D : Player
         isGrounded = false;
         groundNormal = Vector2.zero;
 
-        var hit = Physics2D.BoxCast(box2D.bounds.center, box2D.bounds.extents, 0, Vector2.down, GroundDistanceCheck, CollisionLayer);
+        var hit = Physics2D.BoxCast(box2D.bounds.center, box2D.bounds.size, 0, Vector2.down, GroundDistanceCheck, CollisionLayer);
 
         if (hit.collider != null) {
-            if (Vector2.Dot(transform.up, hit.normal) > 0) {
+            //if (Vector2.Dot(transform.up, hit.normal) > 0) {
                 isGrounded = true;
                 groundNormal = hit.normal;
-            }
+            //}
         }
 
         RaycastHit2D[] results = new RaycastHit2D[2];
@@ -185,6 +188,15 @@ public class RigidbodyPlayerController2D : Player
                 if (Vector2.Dot(transform.right, hitNormal) == -1) {
                     velocity.x = 0;
                 }
+
+                //if (Vector2.Dot(transform.up, hitNormal) < 0) {
+                    //var velocityY = Mathf.Min(rb.velocity.y, 0);
+                    //rb.velocity = new Vector2(rb.velocity.x, velocityY);
+
+                    //Vector2 verticalVelocity = new(0, rb.velocity.y);
+                    //verticalVelocity.y = Mathf.Min(verticalVelocity.y, 0);
+                    //rb.velocity = verticalVelocity + (rb.velocity.x * Vector2.right);
+                //}
             }
         }
 
@@ -203,13 +215,14 @@ public class RigidbodyPlayerController2D : Player
                     canDoubleJump = true;
                 }
 
+                //fixme
                 lastTimeOnGround = Time.time;
 
             } else {
 
-                if (wasPreviouslyGrounded && !isGrounded) {
-                    canDoubleJump = true;
-                }
+                //if (wasPreviouslyGrounded && !isGrounded) {
+                //    canDoubleJump = true;
+                //}
 
                 if (jumped && input.jumpHeld && rb.velocity.y > 0 && Time.time < lastTimeOnGround + MaxJumpDuration) {
                     rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
@@ -221,11 +234,6 @@ public class RigidbodyPlayerController2D : Player
 
                 } else {
                     jumped = false;
-
-                    // Clamp vertical velocity magnitude while falling to prevent speeding up
-                    Vector2 verticalVelocity = new(0, rb.velocity.y);
-                    verticalVelocity = Vector2.ClampMagnitude(verticalVelocity, MaxVelocityForceDown);
-                    rb.velocity = verticalVelocity + velocity;
                 }
 
                 if (doubleJumped) {
@@ -235,6 +243,11 @@ public class RigidbodyPlayerController2D : Player
                     doubleJumped = false;
                     canDoubleJump = false;
                 }
+
+                // Clamp vertical velocity magnitude while falling to prevent speeding up
+                Vector2 verticalVelocity = new(0, rb.velocity.y);
+                verticalVelocity = Vector2.ClampMagnitude(verticalVelocity, MaxVelocityForceDown);
+                rb.velocity = verticalVelocity + velocity;
             }
 
             // Flip sprite after final velocity
@@ -266,6 +279,10 @@ public class RigidbodyPlayerController2D : Player
     }
 
     void OnLevelTransition(LevelTransitionEvent evt) {
+        if (evt.isTransitioningIn) {
+            ResetMove();
+        }
+
         if (evt.isTransitioningOut) {
             ResetVelocity();
             ResetMove();
@@ -277,12 +294,17 @@ public class RigidbodyPlayerController2D : Player
         TookDamage = true;
         this.positionAfterHit = positionAfterHit;
         ScreenFade.Instance.FadeInAndOut(0.5f, 0.5f, 0.5f);
+        anim.SetTrigger("Hit");
     }
 
     void OnDie() {
         isDead = true;
 
         EventManager.Broadcast(Events.PlayerDeathEvent);
+    }
+
+    void OnGameWin(PlayerWinEvent evt) {
+        ResetMove();
     }
 
     private void OnDrawGizmos() {
@@ -293,7 +315,7 @@ public class RigidbodyPlayerController2D : Player
             else
                 Gizmos.color = Color.red;
 
-            RaycastHelper.DrawBoxCast(box.bounds.center, box.bounds.extents, Vector2.down, GroundDistanceCheck);
+            RaycastHelper.DrawBoxCast(box.bounds.center, box.bounds.size, Vector2.down, GroundDistanceCheck);
 
             Gizmos.color = Color.yellow;
             // Wall checking box

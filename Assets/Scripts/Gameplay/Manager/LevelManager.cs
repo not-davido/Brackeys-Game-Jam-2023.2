@@ -9,7 +9,7 @@ public class LevelManager : Singleton<LevelManager>
 
     [SerializeField] bool debug;
     [SerializeField] int startAtLevel = 0;
-    [SerializeField] Transform spawn;
+    //[SerializeField] Transform spawn;
 
     Level currentLevel;
     float inputDisabledTimer;
@@ -38,7 +38,7 @@ public class LevelManager : Singleton<LevelManager>
                 }
 
                 Levels[startAtLevel].gameObject.SetActive(true);
-                GameManager.Instance.GetPlayer().transform.position = spawn.position;
+                GameManager.Instance.GetPlayer().transform.position = Levels[startAtLevel].StartPoint.position;
                 return;
             }
         }

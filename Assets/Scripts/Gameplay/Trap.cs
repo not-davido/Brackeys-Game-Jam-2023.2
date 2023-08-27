@@ -9,6 +9,8 @@ public class Trap : MonoBehaviour
     [SerializeField] protected float knockBackForce = 15;
 
     protected virtual void OnCollisionEnter2D(Collision2D collision) {
+        if (GameManager.Instance.GameIsQuiting) return;
+
         if (collision.collider.TryGetComponent(out Health health)) {
             if (health.TakeDamage(1, null, positionAfterHit)) {
                 if (collision.collider.attachedRigidbody != null) {
@@ -21,7 +23,6 @@ public class Trap : MonoBehaviour
                     var playerDirection = collision.collider.transform.right;
 
                     var knockbackDirection = new Vector2(-playerDirection.x, -collisionNormal.y).normalized;
-                    print(knockbackDirection);
 
                     collision.collider.attachedRigidbody.AddForce(knockbackDirection * knockBackForce, ForceMode2D.Impulse);
                 }

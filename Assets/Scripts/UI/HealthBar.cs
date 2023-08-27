@@ -16,7 +16,6 @@ public class HealthBar : MonoBehaviour
     void Start() {
         Player player = GameManager.Instance.GetPlayer();
         Health health = player.GetComponent<Health>();
-        print(health.CurrentHealth);
         health.OnDamaged += OnDamage;
         health.OnHealed += OnHeal;
 
@@ -35,9 +34,16 @@ public class HealthBar : MonoBehaviour
         //    }
         //}
 
-        for (int i = 0; i < health.CurrentHealth; i++) {
+        for (int i = 0; i < health.MaxHealth; i++) {
             var bar = Instantiate(hpPrefab, parent.transform);
             bars.Add(bar);
+        }
+
+        int j = 0;
+        foreach (var b in bars.Where(b => b.activeSelf)) {
+            if (j == (int)health.CurrentHealth) break;
+            b.SetActive(false);
+            j++;
         }
 
         //if (bars.Count <= 25) {

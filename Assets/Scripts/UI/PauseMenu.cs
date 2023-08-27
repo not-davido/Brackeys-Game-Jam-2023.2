@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject menuRoot;
+    public GameObject main;
+    public GameObject messageBeforeQuiting;
 
     private bool canPause;
 
@@ -18,6 +20,7 @@ public class PauseMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         SetPauseMenuActivation(false);
+        messageBeforeQuiting.SetActive(false);
         canPause = true;
     }
 
@@ -27,6 +30,13 @@ public class PauseMenu : MonoBehaviour
 
         if (Keyboard.current.escapeKey.wasPressedThisFrame ||
             Keyboard.current.pKey.wasPressedThisFrame) {
+
+            if (messageBeforeQuiting.activeSelf) {
+                main.SetActive(true);
+                messageBeforeQuiting.SetActive(false);
+                return;
+            }
+
             SetPauseMenuActivation(!menuRoot.activeSelf);
         }
     }
@@ -49,6 +59,8 @@ public class PauseMenu : MonoBehaviour
         canPause = false;
 
         menuRoot.SetActive(false);
+
+        Time.timeScale = 1;
 
         EventManager.Broadcast(Events.GameQuitEvent);
     }

@@ -28,7 +28,8 @@ public class Health : MonoBehaviour
     float invincibleTimer;
 
     void Awake() {
-        CurrentHealth = MaxHealth;
+        // Total health will be 10 but at start will be 5.
+        CurrentHealth = MaxHealth - 5;
     }
 
     private void Update()

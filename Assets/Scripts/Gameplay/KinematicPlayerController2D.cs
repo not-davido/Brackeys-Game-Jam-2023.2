@@ -74,10 +74,12 @@ public class KinematicPlayerController2D : Player
     private void OnEnable()
     {
         EventManager.AddListener<LevelTransitionEvent>(OnLevelTransition);
+        EventManager.AddListener<PlayerWinEvent>(OnGameWin);
     }
 
     private void OnDisable() {
         EventManager.RemoveListener<LevelTransitionEvent>(OnLevelTransition);
+        EventManager.RemoveListener<PlayerWinEvent>(OnGameWin);
     }
 
     // Start is called before the first frame update
@@ -357,12 +359,19 @@ public class KinematicPlayerController2D : Player
     }
 
     void OnLevelTransition(LevelTransitionEvent evt) {
+        if (evt.isTransitioningIn) {
+            ResetMove();
+        }
 
         if (evt.isTransitioningOut) {
             ResetVelocity();
             ResetMove();
             transform.position = evt.newPosition;
         }
+    }
+
+    void OnGameWin(PlayerWinEvent evt) {
+        ResetMove();
     }
 
     private void OnDrawGizmos() {

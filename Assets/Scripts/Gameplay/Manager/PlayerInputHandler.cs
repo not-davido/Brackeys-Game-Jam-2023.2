@@ -32,7 +32,8 @@ public class PlayerInputHandler : MonoBehaviour
     public bool CanUseInput =>
         !LevelManager.Instance.InputIsDisabled &&
         !GameFlowManager.Instance.GameIsEnding &&
-        !PauseDetector.Instance.IsGamePaused;
+        !PauseDetector.Instance.IsGamePaused &&
+        !GameManager.Instance.GameIsTransitioningLevel;
 
     private void Awake()
     {

@@ -5,8 +5,9 @@ using UnityEngine.Rendering.Universal;
 
 public class GlobalLightCaveTransition : MonoBehaviour
 {
-    [SerializeField] Light2D globalLight;
+    [SerializeField] Light2D GlobalLight;
     [SerializeField] Color CaveColor;
+    [SerializeField] AudioClip CaveAmbience;
 
     bool entered;
 
@@ -14,6 +15,14 @@ public class GlobalLightCaveTransition : MonoBehaviour
     {
         if (entered && ScreenFade.Instance.NormalizedTime >= 1) {
             UpdateColor();
+
+            var caveAmbience = new GameObject("Cave Ambience");
+            var audio = caveAmbience.AddComponent<AudioSource>();
+            audio.clip = CaveAmbience;
+            audio.volume = 0.3f;
+            audio.loop = true;
+            audio.Play();
+
             gameObject.SetActive(false);
         }
     }
@@ -28,6 +37,6 @@ public class GlobalLightCaveTransition : MonoBehaviour
     }
 
     public void UpdateColor() {
-        globalLight.color = CaveColor;
+        GlobalLight.color = CaveColor;
     }
 }

@@ -34,6 +34,7 @@ public class LevelTransition : MonoBehaviour
 
             LevelTransitionEvent evt = Events.LevelTransitionEvent;
             evt.isTransitioningOut = true;
+            evt.isTransitioningIn = false;
             evt.newPosition = StartingPoint ? NextLevel.StartingPosition : NextLevel.EndingPosition;
 
             EventManager.Broadcast(evt);
@@ -54,6 +55,11 @@ public class LevelTransition : MonoBehaviour
             levelIsTransitioningIn = true;
             levelIsTransitioningOut = false;
             enteredNextLevel = true;
+
+            LevelTransitionEvent evt = Events.LevelTransitionEvent;
+            evt.isTransitioningIn = true;
+            evt.isTransitioningOut = false;
+            EventManager.Broadcast(evt);
         }
     }
 
