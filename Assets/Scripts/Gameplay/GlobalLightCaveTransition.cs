@@ -19,7 +19,7 @@ public class GlobalLightCaveTransition : MonoBehaviour
             var caveAmbience = new GameObject("Cave Ambience");
             var audio = caveAmbience.AddComponent<AudioSource>();
             audio.clip = CaveAmbience;
-            audio.volume = 0.3f;
+            audio.volume = 0.5f;
             audio.loop = true;
             audio.Play();
 

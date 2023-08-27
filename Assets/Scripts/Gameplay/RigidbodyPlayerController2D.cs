@@ -70,6 +70,7 @@ public class RigidbodyPlayerController2D : Player
     bool canDash;
     bool canDoubleJump;
     bool isDead;
+    bool isInvincible;
 
 
     readonly int k_horizontalMoveAnimationHash = Animator.StringToHash("MoveX");
@@ -280,6 +281,7 @@ public class RigidbodyPlayerController2D : Player
 
     void OnLevelTransition(LevelTransitionEvent evt) {
         if (evt.isTransitioningIn) {
+            isInvincible = true;
             ResetMove();
         }
 
@@ -287,10 +289,13 @@ public class RigidbodyPlayerController2D : Player
             ResetVelocity();
             ResetMove();
             transform.position = evt.newPosition;
+            isInvincible = false;
         }
     }
 
     void OnDamaged(float dmg, GameObject gameObject, Transform positionAfterHit) {
+        if (isInvincible) return;
+
         TookDamage = true;
         this.positionAfterHit = positionAfterHit;
         ScreenFade.Instance.FadeInAndOut(0.5f, 0.5f, 0.5f);

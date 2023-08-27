@@ -26,15 +26,25 @@ public class Health : MonoBehaviour
 
     bool m_IsDead;
     float invincibleTimer;
+    bool isTransitioning;
 
     void Awake() {
         // Total health will be 10 but at start will be 5.
         CurrentHealth = MaxHealth - 5;
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (Invincible) {
+        EventManager.AddListener<LevelTransitionEvent>(OnLevelTransition);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.RemoveListener<LevelTransitionEvent>(OnLevelTransition);
+    }
+
+    private void Update() {
+        if (!isTransitioning && Invincible) {
             if (Time.time > invincibleTimer + InvincibleDuration) {
                 Invincible = false;
             }
@@ -95,6 +105,16 @@ public class Health : MonoBehaviour
         if (CurrentHealth <= 0f) {
             m_IsDead = true;
             OnDie?.Invoke();
+        }
+    }
+
+    void OnLevelTransition(LevelTransitionEvent evt) {
+        if (evt.isTransitioningIn) {
+            isTransitioning = true;
+            Invincible = true;
+        } else if (evt.isTransitioningOut) {
+            isTransitioning = false;
+            Invincible = false;
         }
     }
 }
