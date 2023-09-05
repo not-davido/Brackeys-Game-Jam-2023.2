@@ -29,6 +29,7 @@ public class LevelManager : Singleton<LevelManager>
     {
         ScreenFade.Instance.FadeOut(0.7f);
 
+#if UNITY_EDITOR
         if (debug) {
             if (startAtLevel >= Levels.Count || startAtLevel < 0) {
                 Debug.LogWarning("Level number does not exist");
@@ -42,7 +43,7 @@ public class LevelManager : Singleton<LevelManager>
                 return;
             }
         }
-
+#endif
         foreach (var level in Levels) {
             level.gameObject.SetActive(false);
         }

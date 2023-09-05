@@ -13,6 +13,7 @@ public class ScreenFade : Singleton<ScreenFade>
     bool fadeInFinished;
     bool fadingOut;
     bool fadeInAndOut;
+    bool setFadeInInactive;
 
     float transitionTimer;
     float delayTimer;
@@ -60,6 +61,9 @@ public class ScreenFade : Singleton<ScreenFade>
 
             if (NormalizedTime >= 1) {
                 fadingIn = false;
+
+                if (setFadeInInactive)
+                    FadeCanvas.gameObject.SetActive(fadeInAndOut);
             }
         }
 
@@ -96,11 +100,12 @@ public class ScreenFade : Singleton<ScreenFade>
         FadeCanvas.gameObject.SetActive(true);
     }
 
-    public void FadeIn(float duration, float delayBeforeFade = 0) {
+    public void FadeIn(float duration, float delayBeforeFade = 0, bool setInactiveAfterFinishing = false) {
         fadeInAndOut = false;
         fadingIn = true;
         fadingOut = false;
         fadeInFinished = false;
+        setFadeInInactive = setInactiveAfterFinishing;
 
         transitionTimer = Time.time + delayBeforeFade;
 

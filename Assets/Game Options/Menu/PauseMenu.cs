@@ -2,25 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
-public class PauseMenu : MonoBehaviour
+public class PauseMenu : Menu
 {
     public GameObject menuRoot;
-    public GameObject main;
-    public GameObject messageBeforeQuiting;
 
-    private bool canPause;
+    bool canPause;
 
-    private void Awake()
+    private void OnEnable()
     {
         EventManager.AddListener<GameCompletedEvent>(GameEnded);
     }
 
+    private void OnDisable() {
+        EventManager.RemoveListener<GameCompletedEvent>(GameEnded);
+    }
+
     // Start is called before the first frame update
-    void Start() {
+    protected override void Start() {
+        base.Start();
+
         SetPauseMenuActivation(false);
-        messageBeforeQuiting.SetActive(false);
         canPause = true;
     }
 
@@ -28,14 +30,13 @@ public class PauseMenu : MonoBehaviour
     void Update() {
         if (!canPause) return;
 
-        if (Keyboard.current.escapeKey.wasPressedThisFrame ||
-            Keyboard.current.pKey.wasPressedThisFrame) {
+        if (Keyboard.current.escapeKey.wasPressedThisFrame || Keyboard.current.pKey.wasPressedThisFrame) {
 
-            if (messageBeforeQuiting.activeSelf) {
-                main.SetActive(true);
-                messageBeforeQuiting.SetActive(false);
+            if (OnMenuEscape(MenuType.Settings, MenuType.Main, GameOption.Get<GraphicOption>().Apply))
                 return;
-            }
+
+            if (OnMenuEscape(MenuType.MessageBeforeQuiting, MenuType.Main))
+                return;
 
             SetPauseMenuActivation(!menuRoot.activeSelf);
         }
@@ -67,10 +68,5 @@ public class PauseMenu : MonoBehaviour
 
     void GameEnded(GameCompletedEvent evt) {
         canPause = false;
-    }
-
-    private void OnDisable()
-    {
-        EventManager.RemoveListener<GameCompletedEvent>(GameEnded);
     }
 }

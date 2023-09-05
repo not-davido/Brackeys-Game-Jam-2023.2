@@ -26,7 +26,7 @@ public class GameFlowManager : Singleton<GameFlowManager>
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         if (GameIsQuiting) {
             if (ScreenFade.Instance.NormalizedTime >= 1) {
@@ -50,9 +50,9 @@ public class GameFlowManager : Singleton<GameFlowManager>
         won = win;
 
         if (win) {
-            ScreenFade.Instance.FadeIn(2.5f, 1);
+            ScreenFade.Instance.FadeIn(2.5f, 1, true);
         } else {
-            ScreenFade.Instance.FadeIn(2.5f, 1);
+            ScreenFade.Instance.FadeIn(2.5f, 1, true);
         }
     }
 
