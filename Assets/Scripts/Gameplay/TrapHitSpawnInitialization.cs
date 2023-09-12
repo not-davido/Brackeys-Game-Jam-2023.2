@@ -9,14 +9,20 @@ public class TrapHitSpawnInitialization : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Trap[] traps = GetComponentsInChildren<Trap>();
-
-        foreach (var trap in traps) {
-            trap.positionAfterHit = HitSpawn;
-        }
+        Spawn(HitSpawn);
     }
 
     public void InitializeSpawn(Trap trap) {
         trap.positionAfterHit = HitSpawn;
+    }
+
+    public void Spawn(Transform transform) {
+        HitSpawn = transform;
+
+        Trap[] traps = GetComponentsInChildren<Trap>();
+
+        foreach (var trap in traps) {
+            trap.positionAfterHit = transform;
+        }
     }
 }

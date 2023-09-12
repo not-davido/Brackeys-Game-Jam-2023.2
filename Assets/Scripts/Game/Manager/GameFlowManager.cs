@@ -30,6 +30,11 @@ public class GameFlowManager : Singleton<GameFlowManager>
     {
         if (GameIsQuiting) {
             if (ScreenFade.Instance.NormalizedTime >= 1) {
+                var checkpointInitializer = FindFirstObjectByType<CheckpointInitializer>();
+                if (checkpointInitializer != null) {
+                    Destroy(checkpointInitializer.gameObject);
+                }
+
                 SceneManager.LoadScene(0);
             }
         }

@@ -1,7 +1,7 @@
+#if UNITY_STANDALONE
 using UnityEngine;
 using UnityEditor;
 using System.Collections;
-using AutoLetterbox;
 
 namespace AutoLetterbox
 {
@@ -85,3 +85,4 @@ namespace AutoLetterbox
 
     }
 }
+#endif

@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : Menu
 {
+    [SerializeField] UnityEngine.UI.Toggle EnableCheckpointToggle;
+
     bool gameIsStarting;
 
     protected override void Start() {
@@ -39,6 +41,11 @@ public class MainMenu : Menu
     public void StartGame() {
         ScreenFade.Instance.FadeIn(1);
         gameIsStarting = true;
+
+        var g = new GameObject("Checkpoint Initializer");
+        var checkpointInitializer = g.AddComponent<CheckpointInitializer>();
+        checkpointInitializer.Initialize = EnableCheckpointToggle.isOn;
+        DontDestroyOnLoad(checkpointInitializer);
     }
 
     public void QuitGame() {

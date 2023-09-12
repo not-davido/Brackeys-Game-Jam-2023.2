@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿#if UNITY_STANDALONE
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using AutoLetterbox;
 
 namespace AutoLetterbox
 {
@@ -292,3 +292,4 @@ namespace AutoLetterbox
         }
     }
 }
+#endif

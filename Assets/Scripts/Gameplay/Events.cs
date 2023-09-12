@@ -8,6 +8,7 @@ public static class Events {
     public static LevelTransitionEvent LevelTransitionEvent = new();
     public static CollectiblePickUpEvent CollectiblePickUpEvent = new();
     public static PlayerWinEvent PlayerWinEvent = new();
+    public static CheckpointReachedEvent CheckpointReachedEvent = new();
 }
 
 public class GameEvent { }
@@ -36,3 +37,5 @@ public class LevelTransitionEvent : GameEvent {
 public class CollectiblePickUpEvent : GameEvent { }
 
 public class PlayerWinEvent : GameEvent { }
+
+public class CheckpointReachedEvent : GameEvent { }

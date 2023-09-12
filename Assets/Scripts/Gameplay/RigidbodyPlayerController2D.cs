@@ -80,11 +80,13 @@ public class RigidbodyPlayerController2D : Player
     private void OnEnable() {
         EventManager.AddListener<LevelTransitionEvent>(OnLevelTransition);
         EventManager.AddListener<PlayerWinEvent>(OnGameWin);
+        EventManager.AddListener<GameQuitEvent>(OnGameQuit);
     }
 
     private void OnDisable() {
         EventManager.RemoveListener<LevelTransitionEvent>(OnLevelTransition);
         EventManager.RemoveListener<PlayerWinEvent>(OnGameWin);
+        EventManager.RemoveListener<GameQuitEvent>(OnGameQuit);
     }
 
     // Start is called before the first frame update
@@ -309,6 +311,10 @@ public class RigidbodyPlayerController2D : Player
     }
 
     void OnGameWin(PlayerWinEvent evt) {
+        ResetMove();
+    }
+
+    void OnGameQuit(GameQuitEvent evt) {
         ResetMove();
     }
 

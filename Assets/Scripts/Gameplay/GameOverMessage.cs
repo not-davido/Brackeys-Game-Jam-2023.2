@@ -37,6 +37,11 @@ public class GameOverMessage : Singleton<GameOverMessage>
     }
 
     public void QuitGame() {
+        var checkpointInitializer = FindFirstObjectByType<CheckpointInitializer>();
+        if (checkpointInitializer != null) {
+            Destroy(checkpointInitializer.gameObject);
+        }
+
         SceneManager.LoadScene(0);
     }
 }
